@@ -1,0 +1,178 @@
+Baza de date
+
+Entități:
+
+1. autori
+2. edituri
+3. carti
+4. categorii
+5. cititori
+6. imprumuturi
+7. utilizatori
+8. roluri
+
+Tabele intermediare: (pentru relațiile many-to-many)
+1. carti_categorii
+2. utilizatori_roluri
+
+1. autori
+- id - cheie primară
+- nume
+- prenume
+- nationalitate
+- an_nastere
+
+Relații:
+- un autor poate avea mai multe cărți
+- relație: autori 1 - N carti
+
+
+2. edituri
+- id - cheie primară
+- nume
+- oras
+- email_contact
+
+Relații:
+- o editură poate avea mai multe cărți
+- relație: edituri 1 - N carti
+
+
+3. carti
+- id - cheie primară
+- titlu
+- isbn
+- an_publicare
+- numar_pagini
+- disponibila
+- autor_id - cheie străină către autori.id
+- editura_id - cheie străină către edituri.id
+
+Relații:
+- o carte aparține unui autor
+- o carte aparține unei edituri
+- o carte poate avea mai multe categorii
+- o carte poate apărea în mai multe împrumuturi
+
+Relații:
+- autori 1 - N carti
+- edituri 1 - N carti
+- carti N - N categorii
+- carti 1 - N imprumuturi
+
+
+4. categorii
+- id - cheie primară
+- nume
+- descriere
+
+Relații:
+- o categorie poate conține mai multe cărți
+- o carte poate face parte din mai multe categorii
+- relație: carti N - N categorii
+
+
+5. carti_categorii
+- carte_id - cheie străină către carti.id
+- categorie_id - cheie străină către categorii.id
+
+Rol:
+- tabel intermediar pentru relația many-to-many dintre carti și categorii
+
+
+6. cititori
+- id - cheie primară
+- nume
+- prenume
+- email
+- telefon
+- data_inscriere
+- tip_cititor
+
+Relații:
+- un cititor poate avea mai multe împrumuturi
+- un cititor are un singur cont de utilizator
+
+Relații:
+- cititori 1 - N imprumuturi
+- cititori 1 - 1 utilizatori
+
+
+7. imprumuturi
+- id - cheie primară
+- data_imprumut
+- data_scadenta
+- data_returnare
+- status
+- observatii
+- cititor_id - cheie străină către cititori.id
+- carte_id - cheie străină către carti.id
+
+Relații:
+- un împrumut aparține unui cititor
+- un împrumut se referă la o carte
+
+Relații:
+- cititori 1 - N imprumuturi
+- carti 1 - N imprumuturi
+
+
+8. utilizatori
+- id - cheie primară
+- username
+- parola
+- activ
+- cititor_id - cheie străină către cititori.id
+
+Relații:
+- un utilizator este asociat unui cititor
+- un utilizator poate avea mai multe roluri
+
+Relații:
+- utilizatori 1 - 1 cititori
+- utilizatori N - N roluri
+
+
+9. roluri
+- id - cheie primară
+- nume
+
+Relații:
+- un rol poate fi atribuit mai multor utilizatori
+- un utilizator poate avea mai multe roluri
+- relație: utilizatori N - N roluri
+
+
+10. utilizatori_roluri
+- utilizator_id - cheie străină către utilizatori.id
+- rol_id - cheie străină către roluri.id
+
+Rol:
+- tabel intermediar pentru relația many-to-many dintre utilizatori și roluri
+
+
+RELAȚII PRINCIPALE
+
+autori 1 - N carti
+edituri 1 - N carti
+carti N - N categorii
+cititori 1 - N imprumuturi
+carti 1 - N imprumuturi
+cititori 1 - 1 utilizatori
+utilizatori N - N roluri
+
+
+TIPURI DE RELAȚII FOLOSITE
+
+One-to-One:
+- cititori 1 - 1 utilizatori
+
+One-to-Many / Many-to-One:
+- autori 1 - N carti
+- edituri 1 - N carti
+- cititori 1 - N imprumuturi
+- carti 1 - N imprumuturi
+
+Many-to-Many:
+- carti N - N categorii
+- utilizatori N - N roluri
