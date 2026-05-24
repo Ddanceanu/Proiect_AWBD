@@ -1,3 +1,8 @@
-# Proiect AWBD
+# Aplicație web pentru gestionarea unei biblioteci
+## Proiect - AWBD
 
-Tem�: Aplica?ie web pentru gestionarea unei biblioteci
+# Diagrama ER
+
+Diagrama ER a fost realizată folosind dbdiagram.io.
+
+![Diagrama ER](docs/diagrama_ER.png)
