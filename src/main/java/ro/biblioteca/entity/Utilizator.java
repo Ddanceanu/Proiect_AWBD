@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,6 +44,14 @@ public class Utilizator {
         this.cititor = cititor;
     }
 
+    public Utilizator(String username, String parola, Boolean activ, Cititor cititor, Set<Rol> roluri) {
+        this.username = username;
+        this.parola = parola;
+        this.activ = activ;
+        this.cititor = cititor;
+        this.roluri = roluri;
+    }
+
     public Long getId() {
         return id;
     }
@@ -77,5 +86,13 @@ public class Utilizator {
 
     public void setCititor(Cititor cititor) {
         this.cititor = cititor;
+    }
+
+    public Set<Rol> getRoluri() {
+        return roluri;
+    }
+
+    public void setRoluri(Set<Rol> roluri) {
+        this.roluri = roluri;
     }
 }
