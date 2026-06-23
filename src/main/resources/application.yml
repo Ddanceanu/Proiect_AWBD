@@ -3,3 +3,13 @@ spring:
     name: biblioteca
   profiles:
     active: dev
+  thymeleaf:
+    cache: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: never

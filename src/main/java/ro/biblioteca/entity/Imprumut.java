@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -12,25 +13,30 @@ public class Imprumut {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "data_imprumut", nullable = false)
     private LocalDate dataImprumut;
 
+    @NotNull
     @Column(name = "data_scadenta", nullable = false)
     private LocalDate dataScadenta;
 
     @Column(name = "data_returnare")
     private LocalDate dataReturnare;
 
+    @NotBlank
     @Column(name = "status", nullable = false)
     private String status;
 
     @Column(name = "observatii")
     private String observatii;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cititor_id", nullable = false)
     private Cititor cititor;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "carte_id", nullable = false)
     private Carte carte;
@@ -51,6 +57,10 @@ public class Imprumut {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDataImprumut() {

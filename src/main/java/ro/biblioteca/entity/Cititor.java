@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -11,18 +12,22 @@ public class Cititor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "nume", nullable = false)
     private String nume;
 
+    @NotBlank
     @Column(name = "prenume", nullable = false)
     private String prenume;
 
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "telefon")
     private String telefon;
 
+    @PastOrPresent
     @Column(name = "data_inscriere")
     private LocalDate dataInscriere;
 

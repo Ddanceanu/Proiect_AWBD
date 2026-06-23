@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${rol.id} != null ? 'Editează rol' : 'Adaugă rol'"></title>
+</head>
+<body>
+<h1 th:text="${rol.id} != null ? 'Editează rol' : 'Adaugă rol'"></h1>
+<form th:action="${rol.id} != null ? @{'/roluri/actualizare/' + ${rol.id}} : @{/roluri/salvare}" method="post" th:object="${rol}">
+    <div>
+        <label for="nume">Nume rol</label>
+        <input type="text" id="nume" th:field="*{nume}" />
+        <div th:if="${#fields.hasErrors('nume')}" th:errors="*{nume}"></div>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/roluri}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

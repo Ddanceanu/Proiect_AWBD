@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${autor.id} != null ? 'Editează autor' : 'Adaugă autor'"></title>
+</head>
+<body>
+<h1 th:text="${autor.id} != null ? 'Editează autor' : 'Adaugă autor'"></h1>
+<form th:action="${autor.id} != null ? @{'/autori/actualizare/' + ${autor.id}} : @{/autori/salvare}" method="post" th:object="${autor}">
+    <div>
+        <label for="nume">Nume</label>
+        <input type="text" id="nume" th:field="*{nume}" />
+        <div th:if="${#fields.hasErrors('nume')}" th:errors="*{nume}"></div>
+    </div>
+    <div>
+        <label for="prenume">Prenume</label>
+        <input type="text" id="prenume" th:field="*{prenume}" />
+        <div th:if="${#fields.hasErrors('prenume')}" th:errors="*{prenume}"></div>
+    </div>
+    <div>
+        <label for="nationalitate">Naționalitate</label>
+        <input type="text" id="nationalitate" th:field="*{nationalitate}" />
+    </div>
+    <div>
+        <label for="anNastere">An naștere</label>
+        <input type="number" id="anNastere" th:field="*{anNastere}" />
+        <div th:if="${#fields.hasErrors('anNastere')}" th:errors="*{anNastere}"></div>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/autori}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

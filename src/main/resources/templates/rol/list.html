@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title>Listă roluri</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<h1>Listă roluri</h1>
+<p><a th:href="@{/roluri/nou}">Adaugă rol</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nume rol</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="rol : ${roluri}">
+        <td th:text="${rol.id}"></td>
+        <td th:text="${rol.nume}"></td>
+        <td>
+            <a th:href="@{'/roluri/detalii/' + ${rol.id}}">Detalii</a> |
+            <a th:href="@{'/roluri/editare/' + ${rol.id}}">Editează</a> |
+            <a th:href="@{'/roluri/stergere/' + ${rol.id}}">Șterge</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

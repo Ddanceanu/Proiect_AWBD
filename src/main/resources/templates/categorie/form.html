@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${categorie.id} != null ? 'Editează categorie' : 'Adaugă categorie'"></title>
+</head>
+<body>
+<h1 th:text="${categorie.id} != null ? 'Editează categorie' : 'Adaugă categorie'"></h1>
+<form th:action="${categorie.id} != null ? @{'/categorii/actualizare/' + ${categorie.id}} : @{/categorii/salvare}" method="post" th:object="${categorie}">
+    <div>
+        <label for="nume">Nume</label>
+        <input type="text" id="nume" th:field="*{nume}" />
+        <div th:if="${#fields.hasErrors('nume')}" th:errors="*{nume}"></div>
+    </div>
+    <div>
+        <label for="descriere">Descriere</label>
+        <input type="text" id="descriere" th:field="*{descriere}" />
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/categorii}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

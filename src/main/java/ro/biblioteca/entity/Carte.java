@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,9 +14,11 @@ public class Carte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "titlu", nullable = false)
     private String titlu;
 
+    @NotBlank
     @Column(name = "isbn", unique = true)
     private String isbn;
 
@@ -28,10 +31,12 @@ public class Carte {
     @Column(name = "disponibila")
     private Boolean disponibila = true;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "editura_id", nullable = false)
     private Editura editura;

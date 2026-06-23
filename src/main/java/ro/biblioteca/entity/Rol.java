@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "roluri")
@@ -10,6 +11,7 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "nume", nullable = false, unique = true)
     private String nume;
 

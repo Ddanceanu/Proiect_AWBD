@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${utilizator.id} != null ? 'Editează utilizator' : 'Adaugă utilizator'"></title>
+</head>
+<body>
+<h1 th:text="${utilizator.id} != null ? 'Editează utilizator' : 'Adaugă utilizator'"></h1>
+<form th:action="${utilizator.id} != null ? @{'/utilizatori/actualizare/' + ${utilizator.id}} : @{/utilizatori/salvare}" method="post" th:object="${utilizator}">
+    <div th:if="${#fields.hasGlobalErrors()}" style="color: #b00020; margin-bottom: 12px;">
+        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+    </div>
+    <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" th:field="*{username}" />
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    </div>
+    <div>
+        <label for="password">Parolă</label>
+        <input type="password" id="password" th:field="*{parola}" />
+        <div th:if="${#fields.hasErrors('parola')}" th:errors="*{parola}"></div>
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+    <div>
+        <label for="activ">Activ</label>
+        <input type="checkbox" id="activ" th:field="*{activ}" />
+    </div>
+    <div>
+        <label for="cititorId">Cititor</label>
+        <select id="cititorId" name="cititorId" required>
+            <option value="" th:if="${utilizator.cititor == null}">-- Selectează cititor --</option>
+            <option th:each="cititor : ${cititori}"
+                    th:value="${cititor.id}"
+                    th:text="${cititor.nume} + ' ' + ${cititor.prenume}"
+                    th:selected="${utilizator.cititor != null} ? ${cititor.id} == ${utilizator.cititor.id} : false">
+            </option>
+        </select>
+        <div th:if="${#lists.isEmpty(cititori)}" style="color: #b00020;">Nu există cititori disponibili. Creează mai întâi un cititor nou.</div>
+    </div>
+    <div>
+        <label>Roluri</label>
+        <div th:each="rol : ${roluri}">
+            <label>
+                <input type="checkbox" name="rolIds" th:value="${rol.id}" th:checked="${selectedRoleIds.contains(rol.id)}" />
+                <span th:text="${rol.nume}"></span>
+            </label>
+        </div>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/utilizatori}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

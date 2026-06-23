@@ -1,5 +1,6 @@
 package ro.biblioteca.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity  // clasa reprezinta o entitate in baza de date
 @Table(name = "autori")
@@ -8,15 +9,18 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // id se genereaza automat
     private Long id;
 
+    @NotBlank
     @Column(name = "nume", nullable = false)
     private String nume;
 
+    @NotBlank
     @Column(name = "prenume", nullable = false)
     private String prenume;
 
     @Column(name = "nationalitate")
     private String nationalitate;
 
+    @NotNull
     @Column(name = "an_nastere")  // coloana an_nastere din bd corespunde cu variabila anNastere din java
     private Integer anNastere;
 

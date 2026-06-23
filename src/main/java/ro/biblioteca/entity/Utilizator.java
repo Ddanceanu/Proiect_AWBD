@@ -1,6 +1,7 @@
 package ro.biblioteca.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,15 +14,22 @@ public class Utilizator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "parola", nullable = false)
     private String parola;
 
+    @NotBlank
+    @Email
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "activ")
     private Boolean activ = true;
 
+    @NotNull
     @OneToOne
     @JoinColumn(name = "cititor_id", nullable = false, unique = true)
     private Cititor cititor;
@@ -37,16 +45,18 @@ public class Utilizator {
     public Utilizator() {
     }
 
-    public Utilizator(String username, String parola, Boolean activ, Cititor cititor) {
+    public Utilizator(String username, String parola, String email, Boolean activ, Cititor cititor) {
         this.username = username;
         this.parola = parola;
+        this.email = email;
         this.activ = activ;
         this.cititor = cititor;
     }
 
-    public Utilizator(String username, String parola, Boolean activ, Cititor cititor, Set<Rol> roluri) {
+    public Utilizator(String username, String parola, String email, Boolean activ, Cititor cititor, Set<Rol> roluri) {
         this.username = username;
         this.parola = parola;
+        this.email = email;
         this.activ = activ;
         this.cititor = cititor;
         this.roluri = roluri;
@@ -70,6 +80,14 @@ public class Utilizator {
 
     public void setParola(String parola) {
         this.parola = parola;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Boolean getActiv() {

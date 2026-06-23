@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${imprumut.id} != null ? 'Editează împrumut' : 'Adaugă împrumut'"></title>
+</head>
+<body>
+<h1 th:text="${imprumut.id} != null ? 'Editează împrumut' : 'Adaugă împrumut'"></h1>
+<form th:action="${imprumut.id} != null ? @{'/imprumuturi/actualizare/' + ${imprumut.id}} : @{/imprumuturi/salvare}" method="post" th:object="${imprumut}">
+    <div>
+        <label for="cititorId">Cititor</label>
+        <select id="cititorId" name="cititorId" required>
+            <option value="" th:if="${imprumut.cititor == null}">-- Selectează cititor --</option>
+            <option th:each="cititor : ${cititori}"
+                    th:value="${cititor.id}"
+                    th:text="${cititor.nume} + ' ' + ${cititor.prenume}"
+                    th:selected="${imprumut.cititor != null} ? ${cititor.id} == ${imprumut.cititor.id} : false">
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="carteId">Carte</label>
+        <select id="carteId" name="carteId" required>
+            <option value="" th:if="${imprumut.carte == null}">-- Selectează carte --</option>
+            <option th:each="carte : ${carti}"
+                    th:value="${carte.id}"
+                    th:text="${carte.titlu}"
+                    th:selected="${imprumut.carte != null} ? ${carte.id} == ${imprumut.carte.id} : false">
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="dataImprumut">Data împrumut</label>
+        <input type="date" id="dataImprumut" th:field="*{dataImprumut}" />
+        <div th:if="${#fields.hasErrors('dataImprumut')}" th:errors="*{dataImprumut}"></div>
+    </div>
+    <div>
+        <label for="dataScadenta">Data scadență</label>
+        <input type="date" id="dataScadenta" th:field="*{dataScadenta}" />
+        <div th:if="${#fields.hasErrors('dataScadenta')}" th:errors="*{dataScadenta}"></div>
+    </div>
+    <div>
+        <label for="dataReturnare">Data returnare</label>
+        <input type="date" id="dataReturnare" th:field="*{dataReturnare}" />
+    </div>
+    <div>
+        <label for="status">Status</label>
+        <input type="text" id="status" th:field="*{status}" />
+        <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+    </div>
+    <div>
+        <label for="observatii">Observații</label>
+        <textarea id="observatii" th:field="*{observatii}"></textarea>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/imprumuturi}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title>Listă utilizatori</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<h1>Listă utilizatori</h1>
+<p><a th:href="@{/utilizatori/nou}">Adaugă utilizator</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Activ</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="utilizator : ${utilizatori}">
+        <td th:text="${utilizator.id}"></td>
+        <td th:text="${utilizator.username}"></td>
+        <td th:text="${utilizator.email}"></td>
+        <td>
+            <span th:each="rol : ${utilizator.roluri}" th:text="${rol.nume}"></span>
+        </td>
+        <td th:text="${utilizator.activ}"></td>
+        <td>
+            <a th:href="@{'/utilizatori/editare/' + ${utilizator.id}}">Editează</a> |
+            <a th:href="@{'/utilizatori/stergere/' + ${utilizator.id}}">Șterge</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,140 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fb;
+    margin: 0;
+    padding: 24px;
+    color: #1f2937;
+}
+
+.container {
+    max-width: 420px;
+    margin: 64px auto;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+}
+
+nav {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border: 1px solid #d9e1ee;
+    border-radius: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #1f6feb;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.logout-form {
+    display: inline;
+    background: transparent;
+    border: none;
+    padding: 0;
+    max-width: none;
+}
+
+.logout-form input[type="hidden"] {
+    display: none;
+}
+
+.logout-btn {
+    min-width: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #1f6feb;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.logout-btn:hover {
+    background: transparent;
+    color: #1557b0;
+}
+
+a {
+    color: #1f6feb;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+th,
+td {
+    border: 1px solid #d9e1ee;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+th {
+    background: #eef3fb;
+}
+
+form {
+    background: #ffffff;
+    border: 1px solid #d9e1ee;
+    border-radius: 10px;
+    padding: 16px;
+    max-width: 640px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 14px;
+    border: 1px solid #cfd6e4;
+    border-radius: 6px;
+}
+
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 14px;
+    border: 1px solid #cfd6e4;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 6px;
+}
+
+button {
+    width: auto;
+    min-width: 130px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #1f6feb;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1557b0;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${carte.id} != null ? 'Editează carte' : 'Adaugă carte'"></title>
+</head>
+<body>
+<h1 th:text="${carte.id} != null ? 'Editează carte' : 'Adaugă carte'"></h1>
+<form th:action="${carte.id} != null ? @{'/carti/actualizare/' + ${carte.id}} : @{/carti/salvare}" method="post" th:object="${carte}">
+    <div>
+        <label for="titlu">Titlu</label>
+        <input type="text" id="titlu" th:field="*{titlu}" />
+        <div th:if="${#fields.hasErrors('titlu')}" th:errors="*{titlu}"></div>
+    </div>
+    <div>
+        <label for="isbn">ISBN</label>
+        <input type="text" id="isbn" th:field="*{isbn}" />
+        <div th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
+    </div>
+    <div>
+        <label for="anPublicare">An publicare</label>
+        <input type="number" id="anPublicare" th:field="*{anPublicare}" />
+    </div>
+    <div>
+        <label for="numarPagini">Număr pagini</label>
+        <input type="number" id="numarPagini" th:field="*{numarPagini}" />
+    </div>
+    <div>
+        <label for="disponibila">Disponibilă</label>
+        <input type="checkbox" id="disponibila" th:field="*{disponibila}" />
+    </div>
+    <div>
+        <label for="autor">Autor</label>
+        <select id="autor" name="autorId" required>
+            <option value="" disabled selected>Selectează autor</option>
+            <option th:each="autor : ${autori}" th:value="${autor.id}"
+                    th:text="${autor.nume + ' ' + autor.prenume}"
+                    th:selected="${carte.autor != null} ? autor.id == carte.autor.id : false"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('autor')}">Selectează un autor.</div>
+    </div>
+    <div>
+        <label for="editura">Editura</label>
+        <select id="editura" name="edituraId" required>
+            <option value="" disabled selected>Selectează editura</option>
+            <option th:each="editura : ${edituri}" th:value="${editura.id}"
+                    th:text="${editura.nume}"
+                    th:selected="${carte.editura != null} ? editura.id == carte.editura.id : false"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('editura')}">Selectează o editură.</div>
+    </div>
+    <div>
+        <label>Categorii</label>
+        <div th:each="categorie : ${categorii}">
+            <label>
+                <input type="checkbox" name="categorieIds" th:value="${categorie.id}"
+                       th:checked="${carte.categorii.contains(categorie)}" />
+                <span th:text="${categorie.nume}"></span>
+            </label>
+        </div>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/carti}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

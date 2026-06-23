@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${editura.id} != null ? 'Editează editură' : 'Adaugă editură'"></title>
+</head>
+<body>
+<h1 th:text="${editura.id} != null ? 'Editează editură' : 'Adaugă editură'"></h1>
+<form th:action="${editura.id} != null ? @{'/edituri/actualizare/' + ${editura.id}} : @{/edituri/salvare}" method="post" th:object="${editura}">
+    <div>
+        <label for="nume">Nume editură</label>
+        <input type="text" id="nume" th:field="*{nume}" />
+        <div th:if="${#fields.hasErrors('nume')}" th:errors="*{nume}"></div>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/edituri}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>

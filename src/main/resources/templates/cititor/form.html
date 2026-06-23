@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<meta charset="UTF-8" />
+    <title th:text="${cititor.id} != null ? 'Editează cititor' : 'Adaugă cititor'"></title>
+</head>
+<body>
+<h1 th:text="${cititor.id} != null ? 'Editează cititor' : 'Adaugă cititor'"></h1>
+<form th:action="${cititor.id} != null ? @{'/cititori/actualizare/' + ${cititor.id}} : @{/cititori/salvare}" method="post" th:object="${cititor}">
+    <div>
+        <label for="nume">Nume</label>
+        <input type="text" id="nume" th:field="*{nume}" />
+        <div th:if="${#fields.hasErrors('nume')}" th:errors="*{nume}"></div>
+    </div>
+    <div>
+        <label for="prenume">Prenume</label>
+        <input type="text" id="prenume" th:field="*{prenume}" />
+        <div th:if="${#fields.hasErrors('prenume')}" th:errors="*{prenume}"></div>
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+    <div>
+        <label for="telefon">Telefon</label>
+        <input type="text" id="telefon" th:field="*{telefon}" />
+    </div>
+    <div>
+        <label for="dataInscriere">Data înscriere</label>
+        <input type="date" id="dataInscriere" th:field="*{dataInscriere}" />
+        <div th:if="${#fields.hasErrors('dataInscriere')}" th:errors="*{dataInscriere}"></div>
+    </div>
+    <div>
+        <label for="tipCititor">Tip cititor</label>
+        <input type="text" id="tipCititor" th:field="*{tipCititor}" />
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/cititori}">Anulează</a>
+    </div>
+</form>
+</body>
+</html>
