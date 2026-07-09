@@ -1,6 +1,6 @@
 package ro.biblioteca.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,13 +17,16 @@ public class ImprumutController {
     private final ImprumutService imprumutService;
     private final CititorService cititorService;
     private final CarteService carteService;
+    private final Validator validator;
 
     public ImprumutController(ImprumutService imprumutService,
                               CititorService cititorService,
-                              CarteService carteService) {
+                              CarteService carteService,
+                              Validator validator) {
         this.imprumutService = imprumutService;
         this.cititorService = cititorService;
         this.carteService = carteService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -41,18 +44,20 @@ public class ImprumutController {
     }
 
     @PostMapping("/salvare")
-    public String saveImprumut(@Valid @ModelAttribute("imprumut") Imprumut imprumut,
+    public String saveImprumut(@ModelAttribute("imprumut") Imprumut imprumut,
                                BindingResult bindingResult,
                                @RequestParam("cititorId") Long cititorId,
                                @RequestParam("carteId") Long carteId,
                                Model model) {
+        imprumut.setCititor(cititorService.findById(cititorId));
+        imprumut.setCarte(carteService.findById(carteId));
+        validateImprumut(imprumut, bindingResult);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("cititori", cititorService.findAll());
             model.addAttribute("carti", carteService.findAll());
             return "imprumut/form";
         }
-        imprumut.setCititor(cititorService.findById(cititorId));
-        imprumut.setCarte(carteService.findById(carteId));
         imprumutService.save(imprumut);
         return "redirect:/imprumuturi";
     }
@@ -67,18 +72,20 @@ public class ImprumutController {
 
     @PostMapping("/actualizare/{id}")
     public String updateImprumut(@PathVariable Long id,
-                                 @Valid @ModelAttribute("imprumut") Imprumut imprumut,
+                                 @ModelAttribute("imprumut") Imprumut imprumut,
                                  BindingResult bindingResult,
                                  @RequestParam("cititorId") Long cititorId,
                                  @RequestParam("carteId") Long carteId,
                                  Model model) {
+        imprumut.setCititor(cititorService.findById(cititorId));
+        imprumut.setCarte(carteService.findById(carteId));
+        validateImprumut(imprumut, bindingResult);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("cititori", cititorService.findAll());
             model.addAttribute("carti", carteService.findAll());
             return "imprumut/form";
         }
-        imprumut.setCititor(cititorService.findById(cititorId));
-        imprumut.setCarte(carteService.findById(carteId));
         imprumutService.update(id, imprumut);
         return "redirect:/imprumuturi";
     }
@@ -87,5 +94,13 @@ public class ImprumutController {
     public String deleteImprumut(@PathVariable Long id) {
         imprumutService.deleteById(id);
         return "redirect:/imprumuturi";
+    }
+
+    private void validateImprumut(Imprumut imprumut, BindingResult bindingResult) {
+        validator.validate(imprumut).forEach(violation ->
+                bindingResult.rejectValue(
+                        violation.getPropertyPath().toString(),
+                        violation.getMessageTemplate(),
+                        violation.getMessage()));
     }
 }

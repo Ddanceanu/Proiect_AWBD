@@ -1,6 +1,6 @@
 package ro.biblioteca.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,13 +23,16 @@ public class UtilizatorController {
     private final UtilizatorService utilizatorService;
     private final RolService rolService;
     private final CititorService cititorService;
+    private final Validator validator;
 
     public UtilizatorController(UtilizatorService utilizatorService,
                                 RolService rolService,
-                                CititorService cititorService) {
+                                CititorService cititorService,
+                                Validator validator) {
         this.utilizatorService = utilizatorService;
         this.rolService = rolService;
         this.cititorService = cititorService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -48,11 +51,15 @@ public class UtilizatorController {
     }
 
     @PostMapping("/salvare")
-    public String saveUtilizator(@Valid @ModelAttribute("utilizator") Utilizator utilizator,
+    public String saveUtilizator(@ModelAttribute("utilizator") Utilizator utilizator,
                                  BindingResult bindingResult,
                                  @RequestParam("cititorId") Long cititorId,
                                  @RequestParam(value = "rolIds", required = false) List<Long> rolIds,
                                  Model model) {
+        utilizator.setCititor(cititorService.findById(cititorId));
+        utilizator.setRoluri(convertRolIds(rolIds));
+        validateUtilizator(utilizator, bindingResult);
+
         if (utilizator.getParola() == null || utilizator.getParola().isBlank()) {
             bindingResult.rejectValue("parola", "NotBlank.utilizator.parola", "Parola este obligatorie.");
         }
@@ -65,8 +72,6 @@ public class UtilizatorController {
             model.addAttribute("selectedRoleIds", rolIds != null ? rolIds : List.of());
             return "utilizator/form";
         }
-        utilizator.setCititor(cititorService.findById(cititorId));
-        utilizator.setRoluri(convertRolIds(rolIds));
         utilizatorService.save(utilizator);
         return "redirect:/utilizatori";
     }
@@ -84,11 +89,15 @@ public class UtilizatorController {
 
     @PostMapping("/actualizare/{id}")
     public String updateUtilizator(@PathVariable Long id,
-                                   @Valid @ModelAttribute("utilizator") Utilizator utilizator,
+                                   @ModelAttribute("utilizator") Utilizator utilizator,
                                    BindingResult bindingResult,
                                    @RequestParam("cititorId") Long cititorId,
                                    @RequestParam(value = "rolIds", required = false) List<Long> rolIds,
                                    Model model) {
+        utilizator.setCititor(cititorService.findById(cititorId));
+        utilizator.setRoluri(convertRolIds(rolIds));
+        validateUtilizator(utilizator, bindingResult);
+
         if (utilizatorService.isCititorAssignedToAnotherUser(cititorId, id)) {
             bindingResult.reject("cititorInUse", "Cititorul selectat este deja asociat altui utilizator.");
         }
@@ -99,8 +108,6 @@ public class UtilizatorController {
             model.addAttribute("selectedRoleIds", rolIds != null ? rolIds : List.of());
             return "utilizator/form";
         }
-        utilizator.setCititor(cititorService.findById(cititorId));
-        utilizator.setRoluri(convertRolIds(rolIds));
         utilizatorService.update(id, utilizator);
         return "redirect:/utilizatori";
     }
@@ -130,5 +137,13 @@ public class UtilizatorController {
         return cititorService.findAll().stream()
                 .filter(cititor -> cititor.getId().equals(cititorCurentId) || !utilizatorService.isCititorAssigned(cititor.getId()))
                 .collect(Collectors.toList());
+    }
+
+    private void validateUtilizator(Utilizator utilizator, BindingResult bindingResult) {
+        validator.validate(utilizator).forEach(violation ->
+                bindingResult.rejectValue(
+                        violation.getPropertyPath().toString(),
+                        violation.getMessageTemplate(),
+                        violation.getMessage()));
     }
 }

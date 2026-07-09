@@ -1,6 +1,6 @@
 package ro.biblioteca.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,15 +27,18 @@ public class CarteController {
     private final AutorService autorService;
     private final EdituraService edituraService;
     private final CategorieService categorieService;
+    private final Validator validator;
 
     public CarteController(CarteService carteService,
                           AutorService autorService,
                           EdituraService edituraService,
-                          CategorieService categorieService) {
+                          CategorieService categorieService,
+                          Validator validator) {
         this.carteService = carteService;
         this.autorService = autorService;
         this.edituraService = edituraService;
         this.categorieService = categorieService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -52,20 +55,22 @@ public class CarteController {
     }
 
     @PostMapping("/salvare")
-    public String saveCarte(@Valid @ModelAttribute("carte") Carte carte,
+    public String saveCarte(@ModelAttribute("carte") Carte carte,
                             BindingResult bindingResult,
                             @RequestParam("autorId") Long autorId,
                             @RequestParam("edituraId") Long edituraId,
                             @RequestParam(value = "categorieIds", required = false) List<Long> categorieIds,
                             Model model) {
+        carte.setAutor(autorService.findById(autorId));
+        carte.setEditura(edituraService.findById(edituraId));
+        carte.setCategorii(convertCategorieIds(categorieIds));
+        validateCarte(carte, bindingResult);
+
         if (bindingResult.hasErrors()) {
             populateFormModel(model);
             return "carte/form";
         }
 
-        carte.setAutor(autorService.findById(autorId));
-        carte.setEditura(edituraService.findById(edituraId));
-        carte.setCategorii(convertCategorieIds(categorieIds));
         carteService.save(carte);
         return "redirect:/carti";
     }
@@ -79,20 +84,22 @@ public class CarteController {
 
     @PostMapping("/actualizare/{id}")
     public String updateCarte(@PathVariable Long id,
-                              @Valid @ModelAttribute("carte") Carte carte,
+                              @ModelAttribute("carte") Carte carte,
                               BindingResult bindingResult,
                               @RequestParam("autorId") Long autorId,
                               @RequestParam("edituraId") Long edituraId,
                               @RequestParam(value = "categorieIds", required = false) List<Long> categorieIds,
                               Model model) {
+        carte.setAutor(autorService.findById(autorId));
+        carte.setEditura(edituraService.findById(edituraId));
+        carte.setCategorii(convertCategorieIds(categorieIds));
+        validateCarte(carte, bindingResult);
+
         if (bindingResult.hasErrors()) {
             populateFormModel(model);
             return "carte/form";
         }
 
-        carte.setAutor(autorService.findById(autorId));
-        carte.setEditura(edituraService.findById(edituraId));
-        carte.setCategorii(convertCategorieIds(categorieIds));
         carteService.update(id, carte);
         return "redirect:/carti";
     }
@@ -116,5 +123,13 @@ public class CarteController {
         return categorieIds.stream()
                 .map(categorieService::findById)
                 .collect(Collectors.toSet());
+    }
+
+    private void validateCarte(Carte carte, BindingResult bindingResult) {
+        validator.validate(carte).forEach(violation ->
+                bindingResult.rejectValue(
+                        violation.getPropertyPath().toString(),
+                        violation.getMessageTemplate(),
+                        violation.getMessage()));
     }
 }
